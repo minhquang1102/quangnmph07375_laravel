@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Models\News;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class NewController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,21 +17,20 @@ class ProductController extends Controller
     {
         // Eloquent
         // all: lay ra toan bo cac ban ghi
-        $products = Product::all();
+        $news = News::all();
         // get: lay ra toan bo cac ban ghi, ket hop dc cac dieu kien #
         // get se nam cuoi cung cua doan truy van
         // lay danh sach va kem ban ghi quan he
         // with() ngay trong cau truy van
-        $productsGet = Product::select('id', 'name', 'price', 'category_id')
-            // ->with('category', function ($query) {
-            //     $query->select('id', 'name');
-            // })
-            ->with('categories:id,name')
+        $newsGet = News::select('id', 'name', 'description', 'category_id')
+            ->withCount('newsProducts')
             ->with('newsProducts:id,name')
-            ->orderBy('id', 'desc')
+            ->with('categoryNews',function($query) {
+                $query->select('id','name');
+            })
             ->paginate(10);
 
-        return view('product.index', ['products' => $productsGet]);
+        return view('news.index', ['news' => $newsGet]);
         // dd('Danh sach category', $categories, $categoriesGet);
     }
 
@@ -79,26 +78,13 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     // Xoa 1 ban ghi product
-    public function delete(Product $pro)
+    public function delete(News $id_news)
     {
         // Neu muon su dung model binding
         // 1. Dinh nghia kieu tham so truyen vao la model tuong ung
         // 2. Tham so o route === ten tham so truyen vao ham
         if ($pro->delete()) {
-            return redirect()->route('products.index');
+            return redirect()->route('news.index');
         }
-
-        // Cach 1: destroy, tra ve id cua thang duoc xoa
-        // Chi ap dung khi nhan vao tham so la gia tri
-        // Neu k xoa duoc thi tra ve 0
-        $productDelete = Product::destroy($id);
-        if ($productDelete !== 0) {
-            return redirect()->route('products.index');
-        }
-        // dd($categoryDelete);
-
-        // Cach 2: delete, tra ve true hoac false
-        // $category = Category::find($id);
-        // $category->delete();
     }
 }

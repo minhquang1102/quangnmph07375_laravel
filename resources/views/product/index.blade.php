@@ -4,9 +4,9 @@
 {{-- section se thay doi
     phan yield trong master
     voi ten tuong ung --}}
-@section('title', 'Category page')
+@section('title', 'Product page')
 
-@section('content-title', 'Category page')
+@section('content-title', 'Product page')
 
 @section('content')
     <div>
@@ -18,7 +18,9 @@
         <thead>
             <th>ID</th>
             <th>Name</th>
+            <th>Category</th>
             <th>Price</th>
+            <th>News</th>
             <th>Actions</th>
         </thead>
         <tbody>
@@ -26,7 +28,20 @@
                 <tr>
                     <td>{{ $product->id }}</td>
                     <td>{{ $product->name }}</td>
-                    <td>{{ $product->price}}</td>
+                    <!-- <td>
+                        <ul>
+                            @foreach($product->categories as $category)
+                                <li>{{$category->name}}</li>
+                            @endforeach
+                        </ul>
+                    </td> -->
+                    <td>{{$product->category->name}} </td>
+                    <td>{{ $product->price }}</td>
+                    <td> 
+                        @foreach ($product->newsProducts as $productItem)
+                            <p>{{$productItem->title}}</p>
+                        @endforeach 
+                    </td>
                     <td>
                         <a
                             href="{{route('products.edit', $product->id)}}"

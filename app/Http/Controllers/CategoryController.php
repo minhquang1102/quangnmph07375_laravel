@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+
 use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
@@ -17,6 +18,7 @@ class CategoryController extends Controller
         // get: lay ra toan bo cac ban ghi, ket hop dc cac dieu kien #
         // get se nam cuoi cung cua doan truy van
         $categoriesGet = Category::select('*')
+            ->withCount('products')
             ->orderBy('id', 'desc')
             ->paginate(10);
 
@@ -33,14 +35,13 @@ class CategoryController extends Controller
     {
         // Validate
         // $request->validate([
-        //     // name nao se validate dieu kien gi
-        //     'name'=>'required|min:6|max:32',
-        //     'description'=>'min:6',
-        //     'status'=>'required'
+        //     // name nào sẽ validate điều kiện gì
+        //     'name' => 'required|min:6|max:32',
+        //     'description' => 'min:6',
+        //     'status' => 'required'
         // ]);
-
-        // Neu co loi trong dieu kien truyen vao thi tu dong ket thuc ham
-        // va quay tro lai form kem bien $errors
+        // Nếu có lỗi trong điều kiện truyền vào thì tự động kết thúc
+        // hàm và quay trở lại form kèm biến $errors
 
         $categoryRequest = $request->all();
         $category = new Category();
@@ -60,19 +61,39 @@ class CategoryController extends Controller
         // Neu khong sd model binding
         // $cate = Category::find($id);
         // $id bây giờ không phải 1 số mà là đối tương Category có id = id trên param
-        return view('category.create', ['category' => $id]);
+
+        // 1. Nếu việc gọi đến phương thức mà không có cú pháp gọi hàm
+        // -> trả về 1 collection (array object), giống all()
+        $products = $id->products; // $id là 1 thể hiện của model Category
+        // dd($id, $id
+        // ->products()->select('name')->paginate(10));
+        // 2. Nếu việc gọi đến phương thức có cú pháp gọi hàm
+            // -> tiến hành query tiếp được và get() hoặc paginate()
+        $productsWithPaginate = $id
+            ->products()->select('name')->paginate(10);
+        return view('category.create', [
+            'category' => $id,
+            'products' => $productsWithPaginate
+        ]);
     }
 
     public function update(CategoryRequest $request, Category $id)
     {
-        // cateUpdate chinh la doi tuong Category co id = $id
+        // $request->validate([
+        //     // name nào sẽ validate điều kiện gì
+        //     'name' => 'required|min:6|max:32',
+        //     'description' => 'min:6',
+        //     'status' => 'required'
+        // ]);
+
+        // $cateUpdate chinh la doi tuong Category co id = $id
         $cateUpdate = $id;
         // Gan gia tri moi cho doi tuong $cateUpdate
         $cateUpdate->name = $request->name;
         $cateUpdate->description = $request->description;
         $cateUpdate->slug = Str::slug($request->name) . '-' . uniqid();
         $cateUpdate->status = $request->status;
-        // Thuc thi viec luu du lieu vao DB
+        // Thuc thi viec luu du lieu moi vao DB
         $cateUpdate->update();
         // Quay ve danh sach
         return redirect()->route('categories.index');

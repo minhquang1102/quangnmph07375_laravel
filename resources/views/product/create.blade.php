@@ -1,24 +1,24 @@
-{{-- Neu edit thi se co bien $category truyen vao --}}
+{{-- Neu edit thi se co bien $product truyen vao --}}
 @extends('layout.master')
 
-@section('title', 'Category page')
+@section('title', 'Product page')
 
 @section(
     'content-title',
-    isset($category) ? 'Category Edit' : 'Category Create'
+    isset($product) ? 'Product Edit' : 'Product Create'
 )
 
 @section('content')
     <form
-        action="{{isset($category)
-            ? route('categories.update', $category->id)
+        action="{{isset($product)
+            ? route('categories.update', $product->id)
             : route('categories.store')}}"
         class="form"
         method="POST"
     >
-        {{-- Neu co du lieu $category thi se là update, ép kiểu method
+        {{-- Neu co du lieu $product thi se là update, ép kiểu method
             về PUT --}}
-        @if (isset($category))
+        @if (isset($product))
             @method('PUT')
         @endif
         {{-- Bat buoc trong form se phai co token bang @csrf --}}
@@ -42,7 +42,7 @@
                 name="name"
                 class="form-control"
                 id="name"
-                value="{{isset($category) ? $category->name : ''}}"
+                value="{{isset($product) ? $product->name : ''}}"
             />
         </div>
         <div class="form-group">
@@ -51,7 +51,7 @@
                 name="description"
                 class="form-control"
                 id="description"
-                value="{{isset($category) ? $category->description : ''}}"
+                value="{{isset($product) ? $product->description : ''}}"
             />
         </div>
         <div class="form-group">
@@ -60,7 +60,7 @@
                 name="status"
                 id="status"
                 value="0"
-                {{isset($category) && $category->status == 0 ? 'checked' : ''}}
+                {{isset($product) && $product->status == 0 ? 'checked' : ''}}
             >
             <label for="status">Deactive</label>
         </div>
@@ -70,31 +70,17 @@
                 name="status"
                 id="status"
                 value="1"
-                {{isset($category) && $category->status == 1 ? 'checked' : ''}}
+                {{isset($product) && $product->status == 1 ? 'checked' : ''}}
             >
             <label for="status">Active</label>
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Sumit</button>
             <a href="{{route('categories.index')}}" class="btn btn-warning">
                 Cancel
             </a>
         </div>
     </form>
-
-    <div>
-        <table>
-            <thead>
-                <tr><th>Product Name</th></tr>
-            </thead>
-            <tbody>
-                @foreach($products as $product)
-                    <tr><td>{{$product->name}}</td></tr>
-                @endforeach
-            </tbody>
-        </table>
-        {{$products->links()}}
-    </div>
 
 @endsection

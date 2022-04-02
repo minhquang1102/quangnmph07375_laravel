@@ -88,7 +88,7 @@
     <!-- AdminLTE App -->
     <script src="{{ asset('/js/adminlte.min.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
-    <script src="{{ asset('/js/demo.js') }}"></script>
+    <!-- <script src="{{ asset('/js/demo.js') }}"></script> -->
 </body>
 
 </html>

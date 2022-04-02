@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\NewController;
 // Su dung Request $request trong callback cua route
 
 /*
@@ -115,4 +116,12 @@ Route::prefix('/products')->name('products.')->group(function () {
     Route::put('/update/{id}', [ProductController::class, 'update'])->name('update');
     // xoa
     Route::delete('/{pro}', [ProductController::class, 'delete'])->name('delete');
+});
+
+Route::prefix('/news')->name('news.')->group(function () {
+    // danh sach
+    Route::get('/', [NewController::class, 'index'])->name('index');
+    
+    // xoa
+    Route::delete('/{id_news}', [NewController::class, 'delete'])->name('delete');
 });
