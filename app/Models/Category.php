@@ -22,14 +22,14 @@ class Category extends Model
     //     return $this->hasMany(Product::class, 'category_id', 'id');
     // }
 
-    // public function products() {
-    //     return $this->belongsToMany(
-    //         Product::class,
-    //         'category_product', // bang trung gian
-    //         'category_id', // khoa ngoai tuong ung voi model hien tai
-    //         'product_id', // khoa ngoai cua bang con lai
-    //     );
-    // }
+    public function products() {
+        return $this->belongsToMany(
+            Product::class,
+            'category_product', // bang trung gian
+            'category_id', // khoa ngoai tuong ung voi model hien tai
+            'product_id', // khoa ngoai cua bang con lai
+        );
+    }
 
     public function news() {
         return $this->hasMany(News::class, 'category_id', 'id');

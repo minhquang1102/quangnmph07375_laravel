@@ -28,18 +28,18 @@
                 <tr>
                     <td>{{ $product->id }}</td>
                     <td>{{ $product->name }}</td>
-                    <!-- <td>
+                    <td>
                         <ul>
                             @foreach($product->categories as $category)
                                 <li>{{$category->name}}</li>
                             @endforeach
                         </ul>
-                    </td> -->
-                    <td>{{$product->category->name}} </td>
+                    </td>
+                    
                     <td>{{ $product->price }}</td>
                     <td> 
                         @foreach ($product->newsProducts as $productItem)
-                            <p>{{$productItem->title}}</p>
+                            <p>{{$productItem->name}}</p>
                         @endforeach 
                     </td>
                     <td>

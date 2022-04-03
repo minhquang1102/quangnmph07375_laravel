@@ -19,6 +19,7 @@ class CategoryController extends Controller
         // get se nam cuoi cung cua doan truy van
         $categoriesGet = Category::select('*')
             ->withCount('products')
+            ->with('news')
             ->orderBy('id', 'desc')
             ->paginate(10);
 
